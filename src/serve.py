@@ -6,9 +6,13 @@ import os
 
 app = FastAPI()
 
-ARTIFACT_BUCKET = os.environ.get("ARTIFACT_BUCKET", "")
+ARTIFACT_BUCKET = os.environ.get("ARTIFACT_BUCKET", "").strip()
+if ARTIFACT_BUCKET.startswith("gs://"):
+    ARTIFACT_BUCKET = ARTIFACT_BUCKET[5:]
+ARTIFACT_BUCKET = ARTIFACT_BUCKET.strip("/")
 MODEL_KEY = "artifacts/current/model.joblib"
 MODEL_PATH = os.path.expanduser("~/models/model.joblib")
+
 
 
 def download_model():

@@ -85,13 +85,18 @@ jobs:
           python - <<'PYEOF'
           import os
           from google.cloud import storage
-          bucket_name = os.environ["ARTIFACT_BUCKET"]
+          bucket_name = os.environ.get("ARTIFACT_BUCKET", "").strip()
+          if bucket_name.startswith("gs://"):
+              bucket_name = bucket_name[5:]
+          bucket_name = bucket_name.strip("/")
+          print(f"Uploading to bucket: '{bucket_name}'")
           client = storage.Client()
           bucket = client.bucket(bucket_name)
           blob = bucket.blob("artifacts/current/model.joblib")
           blob.upload_from_filename("models/model.joblib")
           print("Model uploaded successfully.")
           PYEOF
+
 
       - name: Save report as artifact
         uses: actions/upload-artifact@v4
