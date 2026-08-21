@@ -1,0 +1,5 @@
+[core]
+    remote = labstore
+['remote "labstore"']
+    url = gs://income-bucket-2a202601975-phong/dvc
+    credentialpath = ../sa-key.json
